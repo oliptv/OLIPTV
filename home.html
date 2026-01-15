@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OLIPTV - بهترین منبع سرگرمی</title>
+  <link rel="canonical" href="https://ourlibrary.us/home" />
+  <meta name="description" content="OLIPTV - بیش از ۳۰ کانال تلویزیونی زنده، صدها فیلم و سریال، و مجموعه‌ای غنی از کتاب‌ها" />
+  <link rel="icon" href="https://ourlibrary.us/public/favicon.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background: hsl(150 12% 16%);
+      --foreground: hsl(0 0% 98%);
+      --card: hsl(150 10% 20%);
+      --card-foreground: hsl(0 0% 98%);
+      --primary: hsl(0 72% 51%);
+      --primary-foreground: hsl(0 0% 100%);
+      --secondary: hsl(145 63% 42%);
+      --secondary-foreground: hsl(0 0% 100%);
+      --muted: hsl(150 8% 26%);
+      --muted-foreground: hsl(150 6% 65%);
+      --accent: hsl(150 30% 25%);
+      --border: hsl(150 8% 26%);
+      --gold: hsl(45 93% 58%);
+      --header-footer: hsl(0 40% 18%);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: var(--background); color: var(--foreground); min-height: 100vh; }
+    a { text-decoration: none; color: inherit; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+    
+    /* Header */
+    .header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: var(--header-footer); border-bottom: 1px solid hsl(0 30% 25%); height: 7rem; display: flex; align-items: center; }
+    .header-content { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+    .logo-link { display: flex; align-items: center; gap: 1rem; }
+    .logo { width: 5rem; height: 5rem; border-radius: 50%; }
+    .logo-text { font-size: 2.25rem; font-weight: bold; background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav { display: flex; gap: 0.25rem; }
+    .nav-link { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 0.5rem; color: var(--muted-foreground); transition: all 0.3s; }
+    .nav-link:hover { color: var(--foreground); background: var(--muted); }
+    .nav-link.active { background: var(--primary); color: var(--primary-foreground); }
+    
+    /* Footer */
+    .footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: var(--header-footer); border-top: 1px solid hsl(0 30% 25%); padding: 0.75rem 0; }
+    .footer-content { display: flex; align-items: center; justify-content: space-between; }
+    .footer-text { font-size: 0.75rem; color: var(--muted-foreground); }
+    .donate-btn { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 2rem; background: var(--gold); color: var(--background); font-weight: 600; border-radius: 0.5rem; font-size: 1.125rem; }
+    
+    /* Hero */
+    .hero { position: relative; height: 60vh; min-height: 400px; overflow: hidden; margin-top: 7rem; }
+    .hero-img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(35,40,35,0.6), rgba(35,40,35,0.4), var(--background)); }
+    .hero-content { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; padding: 1rem; }
+    .hero-title { font-size: 3rem; font-weight: bold; margin-bottom: 1.5rem; }
+    .text-gradient { background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-subtitle { font-size: 1.5rem; opacity: 0.9; }
+    
+    /* Sections */
+    .section { padding: 5rem 1rem; }
+    .section-title { font-size: 2rem; font-weight: bold; text-align: center; margin-bottom: 1rem; }
+    .section-subtitle { color: var(--muted-foreground); text-align: center; font-size: 1.125rem; margin-bottom: 3rem; }
+    
+    /* Features Grid */
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    @media (max-width: 768px) { .features-grid { grid-template-columns: 1fr; } }
+    .feature-card { background: linear-gradient(180deg, var(--card), hsl(150 10% 18%)); border: 1px solid var(--border); border-radius: 1rem; overflow: hidden; transition: all 0.3s; }
+    .feature-card:hover { border-color: var(--primary); transform: translateY(-4px); }
+    .feature-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+    .feature-content { padding: 1.5rem; }
+    .feature-icon { width: 2.5rem; height: 2.5rem; background: rgba(220,38,38,0.2); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; }
+    .feature-title { font-size: 1.25rem; font-weight: bold; margin-bottom: 0.25rem; }
+    .feature-title-en { font-size: 0.75rem; color: var(--muted-foreground); margin-bottom: 0.5rem; }
+    .feature-desc { color: var(--muted-foreground); font-size: 0.875rem; }
+    
+    /* About */
+    .about-card { background: linear-gradient(180deg, var(--card), hsl(150 10% 18%)); border: 1px solid var(--border); border-radius: 1.5rem; padding: 2.5rem; max-width: 56rem; margin: 0 auto; text-align: center; }
+    .about-icon { color: var(--primary); margin-bottom: 1.5rem; }
+    .about-text { color: var(--muted-foreground); font-size: 1.125rem; line-height: 1.8; margin-bottom: 1.5rem; }
+    
+    /* Gradient Hero BG */
+    .gradient-hero { background: linear-gradient(135deg, hsl(150 15% 20%) 0%, hsl(0 25% 18%) 50%, var(--background) 100%); }
+    .desc-text { max-width: 56rem; margin: 0 auto; text-align: center; color: var(--muted-foreground); line-height: 1.8; font-size: 1.125rem; }
+    
+    .main-content { padding-bottom: 6rem; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" dir="ltr">
+    <div class="header-content">
+      <a href="https://ourlibrary.us/" class="logo-link">
+        <img src="https://ourlibrary.us/public/logo.jpeg" alt="OLIPTV Logo" class="logo" />
+        <span class="logo-text">OLIPTV</span>
+      </a>
+      <nav class="nav">
+        <a href="https://ourlibrary.us/home.html" class="nav-link active">Home</a>
+        <a href="https://ourlibrary.us/tv.html" class="nav-link">Live TV</a>
+        <a href="https://ourlibrary.us/movies.html" class="nav-link">Movies</a>
+        <a href="https://ourlibrary.us/series.html" class="nav-link">Series</a>
+        <a href="https://ourlibrary.us/books.html" class="nav-link">Books</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- Hero Section -->
+    <section class="hero">
+      <img src="https://ourlibrary.us/assets/hero-afghanistan.jpg" alt="Afghanistan landscape" class="hero-img" />
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div>
+          <h1 class="hero-title">به <span class="text-gradient">OLIPTV</span> خوش آمدید</h1>
+          <p class="hero-subtitle">بهترین منبع سرگرمی شما</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Description -->
+    <section class="section gradient-hero">
+      <p class="desc-text">
+        ما بیش از ۳۰ کانال تلویزیونی زنده، صدها فیلم و سریال، و مجموعه‌ای غنی از کتاب‌های فارسی و پشتو را برای شما فراهم کرده‌ایم. از اخبار روز گرفته تا ورزش، از فیلم‌های کلاسیک تا سریال‌های جدید، همه چیز در یک جا برای شما آماده است.
+      </p>
+    </section>
+
+    <!-- Features -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">خدمات <span class="text-gradient">ما</span></h2>
+        <p class="section-subtitle">محتوای متنوع برای همه سلیقه‌ها</p>
+        
+        <div class="features-grid">
+          <a href="https://ourlibrary.us/tv.html" class="feature-card">
+            <img src="https://ourlibrary.us/public/header-tv.jpg" alt="Live TV" class="feature-img" />
+            <div class="feature-content">
+              <div class="feature-icon">📺</div>
+              <h3 class="feature-title">تلویزیون زنده</h3>
+              <p class="feature-title-en">Live TV</p>
+              <p class="feature-desc">بیش از ۳۰ کانال را زنده تماشا کنید</p>
+            </div>
+          </a>
+          
+          <a href="https://ourlibrary.us/movies.html" class="feature-card">
+            <img src="https://ourlibrary.us/public/movie-cover.jpg" alt="Movies" class="feature-img" />
+            <div class="feature-content">
+              <div class="feature-icon">🎬</div>
+              <h3 class="feature-title">فیلم و سریال</h3>
+              <p class="feature-title-en">Movies & Series</p>
+              <p class="feature-desc">فیلم‌ها و سریال‌های بین‌المللی</p>
+            </div>
+          </a>
+          
+          <a href="https://ourlibrary.us/books.html" class="feature-card">
+            <img src="https://ourlibrary.us/public/book-cover.jpg" alt="Books" class="feature-img" />
+            <div class="feature-content">
+              <div class="feature-icon">📚</div>
+              <h3 class="feature-title">کتابخانه</h3>
+              <p class="feature-title-en">Books</p>
+              <p class="feature-desc">دانلود رایگان کتاب‌ها</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="section">
+      <div class="about-card">
+        <div class="about-icon">❤️</div>
+        <h2 class="section-title" style="margin-bottom: 1.5rem;">درباره ما</h2>
+        <p class="about-text">
+          OLIPTV با هدف حفظ و ترویج فرهنگ غنی افغانستان تأسیس شده است. ما تلاش می‌کنیم تا بهترین محتوای سرگرمی را برای هموطنان عزیز در سراسر جهان فراهم کنیم. از تلویزیون زنده گرفته تا کتاب‌های کلاسیک، همه چیز در اینجا برای شما آماده است.
+        </p>
+        <p class="about-text">
+          با حمایت شما، می‌توانیم این خدمات را گسترش دهیم و محتوای بیشتری اضافه کنیم. از حمایت شما سپاسگزاریم.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" dir="ltr">
+    <div class="container">
+      <div class="footer-content">
+        <span class="footer-text">© 2026 OLIPTV. Reserved</span>
+        <a href="https://www.paypal.com/donate/?hosted_button_id=SZ3W97CMRK7SS" target="_blank" class="donate-btn">
+          ☕️ A Coffee PayPal
+        </a>
+        <span class="footer-text" style="opacity: 0;">© 2026 OLIPTV. Reserved</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

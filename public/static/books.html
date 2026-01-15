@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>کتابخانه - OLIPTV</title>
+  <link rel="canonical" href="https://ourlibrary.us/books" />
+  <meta name="description" content="کتاب‌ها را رایگان دانلود کنید" />
+  <link rel="icon" href="https://ourlibrary.us/public/favicon.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background: hsl(150 12% 16%);
+      --foreground: hsl(0 0% 98%);
+      --card: hsl(150 10% 20%);
+      --primary: hsl(0 72% 51%);
+      --primary-foreground: hsl(0 0% 100%);
+      --secondary: hsl(145 63% 42%);
+      --muted: hsl(150 8% 26%);
+      --muted-foreground: hsl(150 6% 65%);
+      --border: hsl(150 8% 26%);
+      --gold: hsl(45 93% 58%);
+      --header-footer: hsl(0 40% 18%);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: var(--background); color: var(--foreground); min-height: 100vh; }
+    a { text-decoration: none; color: inherit; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+    
+    .header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: var(--header-footer); border-bottom: 1px solid hsl(0 30% 25%); height: 7rem; display: flex; align-items: center; }
+    .header-content { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+    .logo-link { display: flex; align-items: center; gap: 1rem; }
+    .logo { width: 5rem; height: 5rem; border-radius: 50%; }
+    .logo-text { font-size: 2.25rem; font-weight: bold; background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav { display: flex; gap: 0.25rem; }
+    .nav-link { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 0.5rem; color: var(--muted-foreground); transition: all 0.3s; }
+    .nav-link:hover { color: var(--foreground); background: var(--muted); }
+    .nav-link.active { background: var(--primary); color: var(--primary-foreground); }
+    
+    .footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: var(--header-footer); border-top: 1px solid hsl(0 30% 25%); padding: 0.75rem 0; }
+    .footer-content { display: flex; align-items: center; justify-content: space-between; }
+    .footer-text { font-size: 0.75rem; color: var(--muted-foreground); }
+    .donate-btn { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 2rem; background: var(--gold); color: var(--background); font-weight: 600; border-radius: 0.5rem; font-size: 1.125rem; }
+    
+    .page-hero { position: relative; height: 16rem; overflow: hidden; margin-top: 7rem; }
+    .page-hero-img { width: 100%; height: 100%; object-fit: cover; }
+    .page-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(35,40,35,0.7), rgba(35,40,35,0.5), var(--background)); }
+    .page-hero-content { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; }
+    .page-title { font-size: 3rem; font-weight: bold; margin-bottom: 0.5rem; }
+    .text-gradient { background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .page-subtitle { font-size: 1.125rem; opacity: 0.8; }
+    
+    .main-content { padding: 2rem 1rem 7rem; }
+    
+    .download-hint { display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: var(--secondary); font-weight: 500; margin-bottom: 2rem; }
+    
+    .media-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+    @media (max-width: 1200px) { .media-grid { grid-template-columns: repeat(5, 1fr); } }
+    @media (max-width: 1000px) { .media-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 768px) { .media-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 500px) { .media-grid { grid-template-columns: repeat(2, 1fr); } }
+    
+    .book-item { text-align: center; }
+    .media-card { background: linear-gradient(180deg, var(--card), hsl(220 20% 12%)); border: 1px solid var(--border); border-radius: 0.75rem; padding: 0.5rem; transition: all 0.3s; cursor: pointer; display: block; }
+    .media-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(220,38,38,0.2); border-color: var(--secondary); }
+    .media-thumb { aspect-ratio: 2/3; background: var(--muted); border-radius: 0.5rem; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .media-thumb img { width: 100%; height: 100%; object-fit: cover; position: absolute; }
+    .media-thumb-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; }
+    .download-icon { font-size: 2rem; }
+    .media-title { font-weight: 600; font-size: 0.75rem; margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .book-author { font-size: 0.625rem; color: var(--muted-foreground); margin-top: 0.25rem; }
+    
+    .info-card { background: linear-gradient(180deg, var(--card), hsl(150 10% 18%)); border: 1px solid var(--border); border-radius: 1rem; padding: 2rem; max-width: 42rem; margin: 3rem auto 0; text-align: center; }
+    .info-title { font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem; }
+    .info-text { color: var(--muted-foreground); margin-bottom: 1rem; line-height: 1.6; }
+    .info-link { color: var(--secondary); }
+    .info-link:hover { opacity: 0.8; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" dir="ltr">
+    <div class="header-content">
+      <a href="https://ourlibrary.us/" class="logo-link">
+        <img src="https://ourlibrary.us/public/logo.jpeg" alt="OLIPTV Logo" class="logo" />
+        <span class="logo-text">OLIPTV</span>
+      </a>
+      <nav class="nav">
+        <a href="https://ourlibrary.us/home.html" class="nav-link">Home</a>
+        <a href="https://ourlibrary.us/tv.html" class="nav-link">Live TV</a>
+        <a href="https://ourlibrary.us/movies.html" class="nav-link">Movies</a>
+        <a href="https://ourlibrary.us/series.html" class="nav-link">Series</a>
+        <a href="https://ourlibrary.us/books.html" class="nav-link active">Books</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <img src="https://ourlibrary.us/public/header-books.jpg" alt="Books Library" class="page-hero-img" />
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <div>
+        <h1 class="page-title"><span class="text-gradient">کتابخانه</span></h1>
+        <p class="page-subtitle">کتاب‌ها را رایگان دانلود کنید</p>
+      </div>
+    </div>
+  </section>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="download-hint">
+        ⬇️ <span>برای دانلود روی کتاب کلیک کنید</span>
+      </div>
+
+      <div class="media-grid">
+        <div class="book-item"><a href="https://ourlibrary.us/books/kite-runner.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">De Vliegeraar</h3></a><p class="book-author">Khaled Hosseini</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/thousand-suns.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">Duizend Schitterende Zonnen</h3></a><p class="book-author">Khaled Hosseini</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/mountains-echoed.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">En de Bergen Weergalmden</h3></a><p class="book-author">Khaled Hosseini</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/cultural-history.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">Afghanistan: A Cultural History</h3></a><p class="book-author">Hamid Naweed</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/dari-literature.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">Dari Literature</h3></a><p class="book-author">Ahmad Shah Durrani</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/pashto-poetry.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">Pashto Poetry Collection</h3></a><p class="book-author">Khushal Khan Khattak</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/folk-tales.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">Afghan Folk Tales</h3></a><p class="book-author">Traditional</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/history.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">History of Afghanistan</h3></a><p class="book-author">M.H. Kakar</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/rumi.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">Rumi - Collected Works</h3></a><p class="book-author">Jalal ad-Din Rumi</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/proverbs.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">Afghan Proverbs</h3></a><p class="book-author">Traditional</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/pearl-dari.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">The Pearl of Dari</h3></a><p class="book-author">Maulana Jami</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/shahnameh.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">Shahnameh</h3></a><p class="book-author">Ferdowsi</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/cuisine.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">Afghan Cuisine</h3></a><p class="book-author">Nafisa Sekandari</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/rahman-baba.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">Poetry of Rahman Baba</h3></a><p class="book-author">Rahman Baba</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/beauty-school.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">Kabul Beauty School</h3></a><p class="book-author">Deborah Rodriguez</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/places-between.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">The Places in Between</h3></a><p class="book-author">Rory Stewart</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/west-kabul.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">West of Kabul</h3></a><p class="book-author">Tamim Ansary</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/mullah-warrior.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">Confessions of a Mullah Warrior</h3></a><p class="book-author">Masood Farivar</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/unexpected-light.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">An Unexpected Light</h3></a><p class="book-author">Jason Elliot</p></div>
+        <div class="book-item"><a href="https://ourlibrary.us/books/sewing-circles.pdf" target="_blank" class="media-card"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Book"><div class="media-thumb-overlay"><span class="download-icon">⬇️</span></div></div><h3 class="media-title">The Sewing Circles of Herat</h3></a><p class="book-author">Christina Lamb</p></div>
+      </div>
+
+      <!-- Info Section -->
+      <div class="info-card">
+        <h2 class="info-title">درباره کتابخانه ما</h2>
+        <p class="info-text">
+          کتابخانه ما شامل بیش از ۲۰۰ کتاب در مورد فرهنگ، تاریخ، ادبیات و شعر افغانستان است. از آثار کلاسیک مولانا و فردوسی تا رمان‌های مدرن خالد حسینی.
+        </p>
+        <a href="https://ourlibrary.us" target="_blank" class="info-link">
+          برای کتاب‌های بیشتر به ourlibrary.us مراجعه کنید ←
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" dir="ltr">
+    <div class="container">
+      <div class="footer-content">
+        <span class="footer-text">© 2026 OLIPTV. Reserved</span>
+        <a href="https://www.paypal.com/donate/?hosted_button_id=SZ3W97CMRK7SS" target="_blank" class="donate-btn">☕️ A Coffee PayPal</a>
+        <span class="footer-text" style="opacity: 0;">© 2026 OLIPTV. Reserved</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

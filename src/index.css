@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 150 12% 16%;
+    --foreground: 0 0% 98%;
+
+    --card: 150 10% 20%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 150 10% 18%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 72% 51%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 145 63% 42%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 150 8% 26%;
+    --muted-foreground: 150 6% 65%;
+
+    --accent: 150 30% 25%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 150 8% 26%;
+    --input: 150 8% 26%;
+    --ring: 0 72% 51%;
+
+    --radius: 0.5rem;
+
+    --afghan-red: 0 72% 51%;
+    --afghan-green: 145 63% 42%;
+    --afghan-navy: 0 50% 15%;
+    --gold: 45 93% 58%;
+  }
+  .dark {
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+@layer components {
+  .gradient-hero {
+    background: linear-gradient(135deg, hsl(150 15% 20%) 0%, hsl(0 25% 18%) 50%, hsl(var(--background)) 100%);
+  }
+
+  .gradient-card {
+    background: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(150 10% 18%) 100%);
+  }
+
+  .glow-red {
+    box-shadow: 0 0 20px hsl(var(--afghan-red) / 0.3);
+  }
+
+  .glow-green {
+    box-shadow: 0 0 20px hsl(var(--afghan-green) / 0.3);
+  }
+
+  .text-gradient {
+    background: linear-gradient(90deg, hsl(var(--afghan-red)), hsl(var(--afghan-green)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .channel-card {
+    @apply relative overflow-hidden rounded-xl transition-all duration-300;
+    background: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(220 20% 12%) 100%);
+  }
+
+  .channel-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px hsl(var(--afghan-red) / 0.2);
+  }
+
+  .paypal-footer {
+    background: linear-gradient(90deg, hsl(220 30% 12%) 0%, hsl(220 25% 10%) 100%);
+  }
+}

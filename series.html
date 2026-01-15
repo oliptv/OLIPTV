@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>سریال‌ها - OLIPTV</title>
+  <link rel="canonical" href="https://ourlibrary.us/series" />
+  <meta name="description" content="سریال‌های محبوب را تماشا کنید" />
+  <link rel="icon" href="https://ourlibrary.us/public/favicon.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    :root {
+      --background: hsl(150 12% 16%);
+      --foreground: hsl(0 0% 98%);
+      --card: hsl(150 10% 20%);
+      --primary: hsl(0 72% 51%);
+      --primary-foreground: hsl(0 0% 100%);
+      --secondary: hsl(145 63% 42%);
+      --muted: hsl(150 8% 26%);
+      --muted-foreground: hsl(150 6% 65%);
+      --border: hsl(150 8% 26%);
+      --gold: hsl(45 93% 58%);
+      --header-footer: hsl(0 40% 18%);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: var(--background); color: var(--foreground); min-height: 100vh; }
+    a { text-decoration: none; color: inherit; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+    
+    .header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: var(--header-footer); border-bottom: 1px solid hsl(0 30% 25%); height: 7rem; display: flex; align-items: center; }
+    .header-content { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+    .logo-link { display: flex; align-items: center; gap: 1rem; }
+    .logo { width: 5rem; height: 5rem; border-radius: 50%; }
+    .logo-text { font-size: 2.25rem; font-weight: bold; background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav { display: flex; gap: 0.25rem; }
+    .nav-link { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 0.5rem; color: var(--muted-foreground); transition: all 0.3s; }
+    .nav-link:hover { color: var(--foreground); background: var(--muted); }
+    .nav-link.active { background: var(--primary); color: var(--primary-foreground); }
+    
+    .footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: var(--header-footer); border-top: 1px solid hsl(0 30% 25%); padding: 0.75rem 0; }
+    .footer-content { display: flex; align-items: center; justify-content: space-between; }
+    .footer-text { font-size: 0.75rem; color: var(--muted-foreground); }
+    .donate-btn { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 2rem; background: var(--gold); color: var(--background); font-weight: 600; border-radius: 0.5rem; font-size: 1.125rem; }
+    
+    .page-hero { position: relative; height: 16rem; overflow: hidden; margin-top: 7rem; }
+    .page-hero-img { width: 100%; height: 100%; object-fit: cover; }
+    .page-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(35,40,35,0.7), rgba(35,40,35,0.5), var(--background)); }
+    .page-hero-content { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; }
+    .page-title { font-size: 3rem; font-weight: bold; margin-bottom: 0.5rem; }
+    .text-gradient { background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .page-subtitle { font-size: 1.125rem; opacity: 0.8; }
+    
+    .main-content { padding: 2rem 1rem 7rem; }
+    
+    .media-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+    @media (max-width: 1200px) { .media-grid { grid-template-columns: repeat(5, 1fr); } }
+    @media (max-width: 1000px) { .media-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 768px) { .media-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 500px) { .media-grid { grid-template-columns: repeat(2, 1fr); } }
+    
+    .media-card { background: linear-gradient(180deg, var(--card), hsl(220 20% 12%)); border: 1px solid var(--border); border-radius: 0.75rem; padding: 0.5rem; transition: all 0.3s; cursor: pointer; }
+    .media-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(220,38,38,0.2); }
+    .media-thumb { aspect-ratio: 2/3; background: var(--muted); border-radius: 0.5rem; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .media-thumb img { width: 100%; height: 100%; object-fit: cover; position: absolute; }
+    .media-thumb-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; }
+    .play-icon { font-size: 2rem; }
+    .rating-badge { position: absolute; bottom: 0.5rem; left: 0.5rem; background: rgba(0,0,0,0.8); padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.625rem; display: flex; align-items: center; gap: 0.25rem; }
+    .episodes-badge { position: absolute; top: 0.5rem; right: 0.5rem; background: var(--primary); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.625rem; font-weight: 500; }
+    .star { color: var(--gold); }
+    .media-title { font-weight: 600; font-size: 0.75rem; margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .media-year { font-size: 0.625rem; color: var(--muted-foreground); }
+
+    /* Video Player Modal */
+    .video-modal { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
+    .video-modal.active { display: flex; }
+    .video-container { position: relative; width: 100%; max-width: 1200px; aspect-ratio: 16/9; }
+    .video-container video { width: 100%; height: 100%; background: black; }
+    .close-btn { position: absolute; top: -3rem; right: 0; background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; font-size: 1rem; font-family: inherit; }
+    .close-btn:hover { opacity: 0.8; }
+    .video-title { position: absolute; top: -3rem; left: 0; color: white; font-size: 1.25rem; font-weight: 600; }
+    .loading-spinner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); color: white; font-size: 1.25rem; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" dir="ltr">
+    <div class="header-content">
+      <a href="https://ourlibrary.us/" class="logo-link">
+        <img src="https://ourlibrary.us/public/logo.jpeg" alt="OLIPTV Logo" class="logo" />
+        <span class="logo-text">OLIPTV</span>
+      </a>
+      <nav class="nav">
+        <a href="https://ourlibrary.us/home.html" class="nav-link">Home</a>
+        <a href="https://ourlibrary.us/tv.html" class="nav-link">Live TV</a>
+        <a href="https://ourlibrary.us/movies.html" class="nav-link">Movies</a>
+        <a href="https://ourlibrary.us/series.html" class="nav-link active">Series</a>
+        <a href="https://ourlibrary.us/books.html" class="nav-link">Books</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <img src="https://ourlibrary.us/public/header-series.jpg" alt="Series" class="page-hero-img" />
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <div>
+        <h1 class="page-title"><span class="text-gradient">سریال‌ها</span></h1>
+        <p class="page-subtitle">سریال‌های محبوب را تماشا کنید</p>
+      </div>
+    </div>
+  </section>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="media-grid">
+        <div class="media-card" data-stream="https://example.com/rang-e-ishq.m3u8" data-name="Rang-e-Ishq"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">24 قسمت</div><div class="rating-badge"><span class="star">★</span> 8.1</div></div><h3 class="media-title">Rang-e-Ishq</h3><p class="media-year">2023</p></div>
+        <div class="media-card" data-stream="https://example.com/fatima.m3u8" data-name="Fatima"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">18 قسمت</div><div class="rating-badge"><span class="star">★</span> 7.8</div></div><h3 class="media-title">Fatima</h3><p class="media-year">2022</p></div>
+        <div class="media-card" data-stream="https://example.com/dil-e-zaraa.m3u8" data-name="Dil-e-Zaraa"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">20 قسمت</div><div class="rating-badge"><span class="star">★</span> 7.5</div></div><h3 class="media-title">Dil-e-Zaraa</h3><p class="media-year">2021</p></div>
+        <div class="media-card" data-stream="https://example.com/khana-e-ishq.m3u8" data-name="Khana-e-Ishq"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">30 قسمت</div><div class="rating-badge"><span class="star">★</span> 7.9</div></div><h3 class="media-title">Khana-e-Ishq</h3><p class="media-year">2023</p></div>
+        <div class="media-card" data-stream="https://example.com/afghan-star-series.m3u8" data-name="Afghan Star"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">12 قسمت</div><div class="rating-badge"><span class="star">★</span> 8.0</div></div><h3 class="media-title">Afghan Star</h3><p class="media-year">2023</p></div>
+        <div class="media-card" data-stream="https://example.com/sabza-maidaan.m3u8" data-name="Sabza Maidaan"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">16 قسمت</div><div class="rating-badge"><span class="star">★</span> 7.3</div></div><h3 class="media-title">Sabza Maidaan</h3><p class="media-year">2022</p></div>
+        <div class="media-card" data-stream="https://example.com/roshan.m3u8" data-name="Roshan"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">22 قسمت</div><div class="rating-badge"><span class="star">★</span> 7.6</div></div><h3 class="media-title">Roshan</h3><p class="media-year">2021</p></div>
+        <div class="media-card" data-stream="https://example.com/gulrukh.m3u8" data-name="Gulrukh"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">28 قسمت</div><div class="rating-badge"><span class="star">★</span> 7.4</div></div><h3 class="media-title">Gulrukh</h3><p class="media-year">2022</p></div>
+        <div class="media-card" data-stream="https://example.com/shahzada.m3u8" data-name="Shahzada"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">15 قسمت</div><div class="rating-badge"><span class="star">★</span> 7.7</div></div><h3 class="media-title">Shahzada</h3><p class="media-year">2023</p></div>
+        <div class="media-card" data-stream="https://example.com/zindagi-qanoon.m3u8" data-name="Zindagi Aur Qanoon"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">26 قسمت</div><div class="rating-badge"><span class="star">★</span> 7.2</div></div><h3 class="media-title">Zindagi Aur Qanoon</h3><p class="media-year">2021</p></div>
+        <div class="media-card" data-stream="https://example.com/ashq-e-dil.m3u8" data-name="Ashq-e-Dil"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">20 قسمت</div><div class="rating-badge"><span class="star">★</span> 7.8</div></div><h3 class="media-title">Ashq-e-Dil</h3><p class="media-year">2022</p></div>
+        <div class="media-card" data-stream="https://example.com/takht-lahore.m3u8" data-name="Takht-e-Lahore"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">32 قسمت</div><div class="rating-badge"><span class="star">★</span> 7.5</div></div><h3 class="media-title">Takht-e-Lahore</h3><p class="media-year">2023</p></div>
+        <div class="media-card" data-stream="https://example.com/kabul-dreams.m3u8" data-name="Kabul Dreams"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">18 قسمت</div><div class="rating-badge"><span class="star">★</span> 7.6</div></div><h3 class="media-title">Kabul Dreams</h3><p class="media-year">2022</p></div>
+        <div class="media-card" data-stream="https://example.com/safar.m3u8" data-name="Safar"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">14 قسمت</div><div class="rating-badge"><span class="star">★</span> 7.1</div></div><h3 class="media-title">Safar</h3><p class="media-year">2021</p></div>
+        <div class="media-card" data-stream="https://example.com/tamanna.m3u8" data-name="Tamanna"><div class="media-thumb"><img src="https://ourlibrary.us/assets/series-cover.jpg" alt="Series"><div class="media-thumb-overlay"><span class="play-icon">▶</span></div><div class="episodes-badge">24 قسمت</div><div class="rating-badge"><span class="star">★</span> 7.9</div></div><h3 class="media-title">Tamanna</h3><p class="media-year">2023</p></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Video Player Modal -->
+  <div class="video-modal" id="videoModal">
+    <div class="video-container">
+      <span class="video-title" id="videoTitle"></span>
+      <button class="close-btn" id="closeBtn">✕ بستن</button>
+      <video id="videoPlayer" controls autoplay muted playsinline></video>
+      <div class="loading-spinner" id="loadingSpinner">در حال بارگذاری...</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer" dir="ltr">
+    <div class="container">
+      <div class="footer-content">
+        <span class="footer-text">© 2026 OLIPTV. Reserved</span>
+        <a href="https://www.paypal.com/donate/?hosted_button_id=SZ3W97CMRK7SS" target="_blank" class="donate-btn">☕️ A Coffee PayPal</a>
+        <span class="footer-text" style="opacity: 0;">© 2026 OLIPTV. Reserved</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // HLS Player
+    let hls = null;
+    const videoModal = document.getElementById('videoModal');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const videoTitle = document.getElementById('videoTitle');
+    const closeBtn = document.getElementById('closeBtn');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+
+    function playStream(streamUrl, name) {
+      videoTitle.textContent = name;
+      loadingSpinner.style.display = 'flex';
+      videoModal.classList.add('active');
+
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+
+      if (Hls.isSupported()) {
+        hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+        hls.loadSource(streamUrl);
+        hls.attachMedia(videoPlayer);
+
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          loadingSpinner.style.display = 'none';
+          videoPlayer.play().catch(console.error);
+        });
+
+        hls.on(Hls.Events.ERROR, function(event, data) {
+          if (data.fatal) {
+            if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+              hls.startLoad();
+            } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+              hls.recoverMediaError();
+            } else {
+              closePlayer();
+              alert('خطا در پخش. لطفا دوباره تلاش کنید.');
+            }
+          }
+        });
+      } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+        videoPlayer.src = streamUrl;
+        videoPlayer.addEventListener('loadedmetadata', function() {
+          loadingSpinner.style.display = 'none';
+          videoPlayer.play().catch(console.error);
+        });
+      }
+    }
+
+    function closePlayer() {
+      videoModal.classList.remove('active');
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+      videoPlayer.pause();
+      videoPlayer.src = '';
+    }
+
+    closeBtn.addEventListener('click', closePlayer);
+    videoModal.addEventListener('click', function(e) {
+      if (e.target === videoModal) closePlayer();
+    });
+
+    // Media cards click
+    document.querySelectorAll('.media-card').forEach(card => {
+      card.addEventListener('click', function() {
+        const streamUrl = this.dataset.stream;
+        const name = this.dataset.name;
+        if (streamUrl) playStream(streamUrl, name);
+      });
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePlayer();
+    });
+  </script>
+</body>
+</html>

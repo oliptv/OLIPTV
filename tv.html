@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تلویزیون زنده - OLIPTV</title>
+  <link rel="canonical" href="https://ourlibrary.us/tv" />
+  <meta name="description" content="بیش از ۳۰ کانال تلویزیونی زنده - ورزش، اخبار، سرگرمی" />
+  <link rel="icon" href="https://ourlibrary.us/public/favicon.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    :root {
+      --background: hsl(150 12% 16%);
+      --foreground: hsl(0 0% 98%);
+      --card: hsl(150 10% 20%);
+      --primary: hsl(0 72% 51%);
+      --primary-foreground: hsl(0 0% 100%);
+      --secondary: hsl(145 63% 42%);
+      --muted: hsl(150 8% 26%);
+      --muted-foreground: hsl(150 6% 65%);
+      --accent: hsl(150 30% 25%);
+      --border: hsl(150 8% 26%);
+      --gold: hsl(45 93% 58%);
+      --header-footer: hsl(0 40% 18%);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: var(--background); color: var(--foreground); min-height: 100vh; }
+    a { text-decoration: none; color: inherit; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+    
+    .header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: var(--header-footer); border-bottom: 1px solid hsl(0 30% 25%); height: 7rem; display: flex; align-items: center; }
+    .header-content { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+    .logo-link { display: flex; align-items: center; gap: 1rem; }
+    .logo { width: 5rem; height: 5rem; border-radius: 50%; }
+    .logo-text { font-size: 2.25rem; font-weight: bold; background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav { display: flex; gap: 0.25rem; }
+    .nav-link { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 0.5rem; color: var(--muted-foreground); transition: all 0.3s; }
+    .nav-link:hover { color: var(--foreground); background: var(--muted); }
+    .nav-link.active { background: var(--primary); color: var(--primary-foreground); }
+    
+    .footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: var(--header-footer); border-top: 1px solid hsl(0 30% 25%); padding: 0.75rem 0; }
+    .footer-content { display: flex; align-items: center; justify-content: space-between; }
+    .footer-text { font-size: 0.75rem; color: var(--muted-foreground); }
+    .donate-btn { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 2rem; background: var(--gold); color: var(--background); font-weight: 600; border-radius: 0.5rem; font-size: 1.125rem; }
+    
+    .page-hero { position: relative; height: 16rem; overflow: hidden; margin-top: 7rem; }
+    .page-hero-img { width: 100%; height: 100%; object-fit: cover; }
+    .page-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(35,40,35,0.7), rgba(35,40,35,0.5), var(--background)); }
+    .page-hero-content { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; }
+    .page-title { font-size: 3rem; font-weight: bold; margin-bottom: 0.5rem; }
+    .text-gradient { background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .page-subtitle { font-size: 1.125rem; opacity: 0.8; }
+    
+    .main-content { padding: 2rem 1rem 7rem; }
+    
+    .filter-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-bottom: 2rem; }
+    .filter-btn { padding: 0.5rem 1rem; border-radius: 0.5rem; background: var(--muted); color: var(--muted-foreground); border: none; cursor: pointer; font-family: inherit; transition: all 0.3s; }
+    .filter-btn.active { background: var(--primary); color: var(--primary-foreground); }
+    .filter-btn:hover { background: var(--primary); color: var(--primary-foreground); }
+    
+    .channels-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; }
+    @media (max-width: 1200px) { .channels-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 900px) { .channels-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 600px) { .channels-grid { grid-template-columns: repeat(2, 1fr); } }
+    
+    .channel-card { background: linear-gradient(180deg, var(--card), hsl(220 20% 12%)); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1rem; transition: all 0.3s; cursor: pointer; }
+    .channel-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(220,38,38,0.2); }
+    .channel-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+    .category-badge { padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 500; border-radius: 0.25rem; }
+    .category-sport { background: var(--secondary); color: white; }
+    .category-news { background: var(--primary); color: white; }
+    .category-entertainment { background: var(--accent); color: white; }
+    .live-badge { display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; color: var(--primary); }
+    .live-dot { width: 0.5rem; height: 0.5rem; background: var(--primary); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .channel-thumb { aspect-ratio: 16/9; background: var(--muted); border-radius: 0.5rem; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .channel-thumb img { width: 100%; height: 100%; object-fit: cover; position: absolute; }
+    .channel-thumb-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; }
+    .play-icon { font-size: 2.5rem; }
+    .channel-name { font-weight: 600; font-size: 0.875rem; }
+
+    /* Video Player Modal */
+    .video-modal { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
+    .video-modal.active { display: flex; }
+    .video-container { position: relative; width: 100%; max-width: 1200px; aspect-ratio: 16/9; }
+    .video-container video { width: 100%; height: 100%; background: black; }
+    .close-btn { position: absolute; top: -3rem; right: 0; background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; font-size: 1rem; font-family: inherit; }
+    .close-btn:hover { opacity: 0.8; }
+    .video-title { position: absolute; top: -3rem; left: 0; color: white; font-size: 1.25rem; font-weight: 600; }
+    .loading-spinner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); color: white; font-size: 1.25rem; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" dir="ltr">
+    <div class="header-content">
+      <a href="https://ourlibrary.us/" class="logo-link">
+        <img src="https://ourlibrary.us/public/logo.jpeg" alt="OLIPTV Logo" class="logo" />
+        <span class="logo-text">OLIPTV</span>
+      </a>
+      <nav class="nav">
+        <a href="https://ourlibrary.us/home.html" class="nav-link">Home</a>
+        <a href="https://ourlibrary.us/tv.html" class="nav-link active">Live TV</a>
+        <a href="https://ourlibrary.us/movies.html" class="nav-link">Movies</a>
+        <a href="https://ourlibrary.us/series.html" class="nav-link">Series</a>
+        <a href="https://ourlibrary.us/books.html" class="nav-link">Books</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <img src="https://ourlibrary.us/public/header-tv.jpg" alt="Live TV" class="page-hero-img" />
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <div>
+        <h1 class="page-title">تلویزیون <span class="text-gradient">زنده</span></h1>
+        <p class="page-subtitle">بیش از ۳۰ کانال را زنده تماشا کنید</p>
+      </div>
+    </div>
+  </section>
+
+  <main class="main-content">
+    <div class="container">
+      <!-- Filter Buttons -->
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">همه کانال‌ها<br><small>Alle Kanalen</small></button>
+        <button class="filter-btn" data-filter="sport">ورزش<br><small>Sport</small></button>
+        <button class="filter-btn" data-filter="news">اخبار<br><small>Nieuws</small></button>
+        <button class="filter-btn" data-filter="entertainment">سرگرمی<br><small>Entertainment</small></button>
+      </div>
+
+      <!-- Channels Grid -->
+      <div class="channels-grid">
+        <!-- Sport Channels -->
+        <div class="channel-card" data-category="sport" data-stream="https://stream.snexus.co/live/SN_WILDLIFE/index.m3u8" data-name="Solh Sport"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Solh Sport</h3></div>
+        <div class="channel-card" data-category="sport" data-stream="https://spstr.abntv.live/hls/psstream.m3u8" data-name="Persiana Sport"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Persiana Sport</h3></div>
+        <div class="channel-card" data-category="sport" data-stream="https://live.teleradiocom.tj/8/3m.m3u8" data-name="Futbol"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Futbol</h3></div>
+        <div class="channel-card" data-category="sport" data-stream="https://proshls.wns.live/hls/stream.m3u8" data-name="All Sport"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">All Sport</h3></div>
+        <div class="channel-card" data-category="sport" data-stream="https://gg.hls2.xyz/live/irib-varzesh/chunks.m3u8" data-name="Varzesh9"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Varzesh9</h3></div>
+        <div class="channel-card" data-category="sport" data-stream="https://gg.hls2.xyz/live/IR%20-%20Varzish%20TV/chunks.m3u8" data-name="Varzish"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Varzish</h3></div>
+        <div class="channel-card" data-category="sport" data-stream="https://fflivetolotv.b-cdn.net/media_0.m3u8" data-name="Tolo Sport"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Tolo Sport</h3></div>
+        <div class="channel-card" data-category="sport" data-stream="https://cdn.lemartv.com/live/lemartv/index.m3u8" data-name="Lemar Sport"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Lemar Sport</h3></div>
+        <div class="channel-card" data-category="sport" data-stream="https://1tv.com.af/live/1tv.m3u8" data-name="1TV Sport"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">1TV Sport</h3></div>
+        <div class="channel-card" data-category="sport" data-stream="https://d10rltuy0iweup.cloudfront.net/ARIANANEWS/myStream/playlist.m3u8" data-name="Ariana Sport"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Ariana Sport</h3></div>
+        <div class="channel-card" data-category="sport" data-stream="https://stream.afghansport.af/live/stream.m3u8" data-name="Afghan Sport TV"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Afghan Sport TV</h3></div>
+        <div class="channel-card" data-category="sport" data-stream="https://shamshadtv.com/live/shamshad.m3u8" data-name="Shamshad Sport"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Shamshad Sport</h3></div>
+        <div class="channel-card" data-category="sport" data-stream="https://stream.kabulsport.af/live/stream.m3u8" data-name="Kabul Sport"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Kabul Sport</h3></div>
+        <div class="channel-card" data-category="sport" data-stream="https://stream.apl.af/live/stream.m3u8" data-name="APL Sports"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">APL Sports</h3></div>
+        <div class="channel-card" data-category="sport" data-stream="https://stream.acb.af/live/cricket.m3u8" data-name="ACB Cricket TV"><div class="channel-header"><span class="category-badge category-sport">Sport</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-sport.jpg" alt="Sport"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">ACB Cricket TV</h3></div>
+        
+        <!-- News Channels - Sorted by priority -->
+        <div class="channel-card" data-category="news" data-stream="https://hls.afintl.com/hls/stream.m3u8" data-name="Afghanistan International"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Afghanistan International</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://vs-hls-pushb-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_persian_tv/t=3840/v=pv14/b=5070016/main.m3u8" data-name="BBC Persian"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">BBC Persian</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://live.playstop.me/1816184091/index.m3u8" data-name="Iran International"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Iran International</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://voa-ingest.akamaized.net/hls/live/2033876/tvmc07/playlist.m3u8" data-name="VOA Farsi"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">VOA Farsi</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://fflivetolotv.b-cdn.net/media_0.m3u8" data-name="Tolo TV"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Tolo TV</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://fflivetolonews.b-cdn.net/media_0.m3u8" data-name="Tolo News"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Tolo News</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://d10rltuy0iweup.cloudfront.net/ARIANANEWS/myStream/playlist.m3u8" data-name="Ariana News"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Ariana News</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://1tv.com.af/live/1tv.m3u8" data-name="1TV News"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">1TV News</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://shamshadtv.com/live/shamshad.m3u8" data-name="Shamshad TV News"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Shamshad TV News</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://khurshidtv.af/live/stream.m3u8" data-name="Khurshid TV News"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Khurshid TV News</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://cdn.lemartv.com/live/lemartv/index.m3u8" data-name="Lemar News"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Lemar News</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://fflivetolonews.b-cdn.net/media_0.m3u8" data-name="TOLOnews 24"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">TOLOnews 24</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://zantv.af/live/stream.m3u8" data-name="Zan TV News"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Zan TV News</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://atn.af/live/stream.m3u8" data-name="ATN News"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">ATN News</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://mitratv.af/live/stream.m3u8" data-name="Mitra TV"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Mitra TV</h3></div>
+        <div class="channel-card" data-category="news" data-stream="https://tamadontv.af/live/stream.m3u8" data-name="Tamadon TV"><div class="channel-header"><span class="category-badge category-news">News</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-news.jpg" alt="News"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Tamadon TV</h3></div>
+        
+        <!-- Entertainment Channels -->
+        <div class="channel-card" data-category="entertainment" data-stream="https://fflivetolotv.b-cdn.net/media_0.m3u8" data-name="Tolo TV"><div class="channel-header"><span class="category-badge category-entertainment">Entertainment</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-entertainment.jpg" alt="Entertainment"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Tolo TV</h3></div>
+        <div class="channel-card" data-category="entertainment" data-stream="https://d10rltuy0iweup.cloudfront.net/ARIANANEWS/myStream/playlist.m3u8" data-name="Ariana TV"><div class="channel-header"><span class="category-badge category-entertainment">Entertainment</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-entertainment.jpg" alt="Entertainment"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Ariana TV</h3></div>
+        <div class="channel-card" data-category="entertainment" data-stream="https://1tv.com.af/live/1tv.m3u8" data-name="1TV Afghanistan"><div class="channel-header"><span class="category-badge category-entertainment">Entertainment</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-entertainment.jpg" alt="Entertainment"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">1TV Afghanistan</h3></div>
+        <div class="channel-card" data-category="entertainment" data-stream="https://cdn.lemartv.com/live/lemartv/index.m3u8" data-name="Lemar TV"><div class="channel-header"><span class="category-badge category-entertainment">Entertainment</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-entertainment.jpg" alt="Entertainment"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Lemar TV</h3></div>
+        <div class="channel-card" data-category="entertainment" data-stream="https://shamshadtv.com/live/shamshad.m3u8" data-name="Shamshad TV"><div class="channel-header"><span class="category-badge category-entertainment">Entertainment</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-entertainment.jpg" alt="Entertainment"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Shamshad TV</h3></div>
+        <div class="channel-card" data-category="entertainment" data-stream="https://khurshidtv.af/live/stream.m3u8" data-name="Khurshid TV"><div class="channel-header"><span class="category-badge category-entertainment">Entertainment</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-entertainment.jpg" alt="Entertainment"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Khurshid TV</h3></div>
+        <div class="channel-card" data-category="entertainment" data-stream="https://rta.org.af/live/rta.m3u8" data-name="RTA TV"><div class="channel-header"><span class="category-badge category-entertainment">Entertainment</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-entertainment.jpg" alt="Entertainment"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">RTA TV</h3></div>
+        <div class="channel-card" data-category="entertainment" data-stream="https://kawoontv.af/live/stream.m3u8" data-name="Kawoon TV"><div class="channel-header"><span class="category-badge category-entertainment">Entertainment</span><span class="live-badge"><span class="live-dot"></span>LIVE</span></div><div class="channel-thumb"><img src="https://ourlibrary.us/assets/tv-entertainment.jpg" alt="Entertainment"><div class="channel-thumb-overlay"><span class="play-icon">▶</span></div></div><h3 class="channel-name">Kawoon TV</h3></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Video Player Modal -->
+  <div class="video-modal" id="videoModal">
+    <div class="video-container">
+      <span class="video-title" id="videoTitle"></span>
+      <button class="close-btn" id="closeBtn">✕ بستن</button>
+      <video id="videoPlayer" controls autoplay muted playsinline></video>
+      <div class="loading-spinner" id="loadingSpinner">در حال بارگذاری...</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer" dir="ltr">
+    <div class="container">
+      <div class="footer-content">
+        <span class="footer-text">© 2026 OLIPTV. Reserved</span>
+        <a href="https://www.paypal.com/donate/?hosted_button_id=SZ3W97CMRK7SS" target="_blank" class="donate-btn">☕️ A Coffee PayPal</a>
+        <span class="footer-text" style="opacity: 0;">© 2026 OLIPTV. Reserved</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // HLS Player
+    let hls = null;
+    const videoModal = document.getElementById('videoModal');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const videoTitle = document.getElementById('videoTitle');
+    const closeBtn = document.getElementById('closeBtn');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+
+    function playStream(streamUrl, name) {
+      videoTitle.textContent = name;
+      loadingSpinner.style.display = 'flex';
+      videoModal.classList.add('active');
+
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+
+      if (Hls.isSupported()) {
+        hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+        hls.loadSource(streamUrl);
+        hls.attachMedia(videoPlayer);
+
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          loadingSpinner.style.display = 'none';
+          videoPlayer.play().catch(console.error);
+        });
+
+        hls.on(Hls.Events.ERROR, function(event, data) {
+          if (data.fatal) {
+            if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+              hls.startLoad();
+            } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+              hls.recoverMediaError();
+            } else {
+              closePlayer();
+              alert('خطا در پخش. لطفا دوباره تلاش کنید.');
+            }
+          }
+        });
+      } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+        videoPlayer.src = streamUrl;
+        videoPlayer.addEventListener('loadedmetadata', function() {
+          loadingSpinner.style.display = 'none';
+          videoPlayer.play().catch(console.error);
+        });
+      }
+    }
+
+    function closePlayer() {
+      videoModal.classList.remove('active');
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+      videoPlayer.pause();
+      videoPlayer.src = '';
+    }
+
+    closeBtn.addEventListener('click', closePlayer);
+    videoModal.addEventListener('click', function(e) {
+      if (e.target === videoModal) closePlayer();
+    });
+
+    // Channel cards click
+    document.querySelectorAll('.channel-card').forEach(card => {
+      card.addEventListener('click', function() {
+        const streamUrl = this.dataset.stream;
+        const name = this.dataset.name;
+        if (streamUrl) playStream(streamUrl, name);
+      });
+    });
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const filter = this.dataset.filter;
+        
+        document.querySelectorAll('.channel-card').forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePlayer();
+    });
+  </script>
+</body>
+</html>
