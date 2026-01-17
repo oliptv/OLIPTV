@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Tv, Film, BookOpen, Play } from "lucide-react";
-import logo from "@/assets/logo.jpeg";
+import logo from "@/assets/logo.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,8 +22,8 @@ const Header = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-28">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-4">
-            <img src={logo} alt="OLIPTV Logo" className="w-20 h-20 rounded-full" />
+          <Link to="/" className="flex items-center gap-4 ml-4">
+            <img src={logo} alt="OLIPTV Logo" className="w-24 h-24 rounded-full" />
             <span className="text-4xl font-bold text-gradient">OLIPTV</span>
           </Link>
 
